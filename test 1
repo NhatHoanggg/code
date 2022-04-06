@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+struct
+{
+    int id;
+    char name[30];
+    char hobby[30][30];
+    int age;
+    int number;
+}list[30];
+
+int count[30];
+
+FILE *f;
+
+int age_x,n,num;
+char name_x[30],sex_x[3];
+char hobby_x[30][30];
+
+char deletespace(char *s)
+{
+    char st[30];
+    int length=strlen(s);
+    while (s[length]==" "){
+        length--;
+    }
+    strncpy(st,s,length);
+    return st;
+}
+
+
+void input_x(){
+    printf("\n Nhap Ten: ");                 scanf("%s",&name_x);
+    printf("\n Gioi Tinh: ");                scanf("%s",&sex_x);
+    printf("\n Nhap tuoi: ");                scanf("%s",&age_x);
+    printf("\n Nhap so luong so thich: ");   scanf("%d",&n);
+
+    for (int i=1; i<=n ; i++ ) {
+        printf("\n   So thich thu %d : ",i);
+        scanf("%s",&hobby_x[i]);
+        }
+
+    printf("\n===========================================\n ");
+}
+
+int main(){
+    input_x();
+    if (sex_x[1]='u')
+        f=fopen("nam.txt","r");
+    else
+        f=fopen("nu.txt","r");
+
+    fscanf(f,"%d",&num);  // so nguoi co trong danh sach
+
+    for(int i=1; i<=num; i++ ){
+        list[i].id=i;
+        fscanf(f,"%d %d" , &list[i].age, &list[i].number);
+        fgets(list[i].name,50,(FILE*)f);
+        for (int j=1; j<=list[i].number; j++ ){
+            fgets(list[i].hobby[j],50,(FILE*)f);
+            }
+        }
+    char *check;
+    for (int i=1; i<=num ; i++ ){
+        count[i]=0;
+
+        for (int j=1; j<= list[i].number; j++ )
+            for (int k=1; k<=n ;k++){
+                check=strstr(list[i].hobby[j],hobby_x[k]);
+                if (check!= NULL ){
+                    count[i]++;
+                    break;
+                }
+            }
+        }
+
+    int max=0,k=0;
+    for (int i=1; i<=num; i++)
+        if (count[i]>max)
+            max=count[i];
+    printf(" \n --- Nhung Nguoi hop voi ban ---- \n");
+    //printf("%d\n",max);
+
+    for (int i=1; i<=num; i++)
+        if (max==count[i] ){
+            k++;
+            printf("%d: %s ",k,list[i].name);
+            //for( int j=1 ; j<= list[i].number; j++)
+            //    printf("%s",list[i].hobby[j]);
+
+            printf("\n");
+        }
+    fclose(f);
+    return 0;
+}
